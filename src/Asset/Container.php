@@ -31,6 +31,13 @@ class Container
     protected $assets = array();
 
     /**
+     * All of the removed assets.
+     *
+     * @var array
+     */
+    protected $removable = array();
+
+    /**
      * Create a new asset container instance.
      *
      * @param  string                       $name
@@ -129,6 +136,20 @@ class Container
 
         return $this;
     }
+    /**
+     * Remove style or scripts from Asset
+     * @param  string $type type (style or scripts)
+     * @param  string $name element name
+     * @return \Orchestra\Asset\Container
+     */
+    public function remove($type, $name){
+        if(!in_array($type, array('script','style'))) {
+            return null;
+        }
+        $this->unregister($type, $name);
+
+        return $this;
+    }
 
     /**
      * Add a JavaScript file to the registered assets.
@@ -165,6 +186,24 @@ class Container
             'source'       => $source,
             'dependencies' => $dependencies,
             'attributes'   => $attributes,
+        );
+    }
+
+    /**
+     * Remove an asset of registered assets.
+     *
+     * @param  string   $type
+     * @param  string   $name
+     * @param  string   $source
+     * @param  array    $dependencies
+     * @param  array    $attributes
+     * @return void
+     */
+    protected function unregister($type, $name)
+    {
+        $this->removable[$type][] = array(
+            'type' => $type,
+            'name' => $name
         );
     }
 

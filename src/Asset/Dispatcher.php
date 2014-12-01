@@ -82,11 +82,20 @@ class Dispatcher
      *
      * @param  string      $group
      * @param  array       $assets
+     * @param  array       $remove
      * @param  string|null $prefix
      * @return string
      */
-    public function run($group, array $assets = array(), $prefix = null)
+    public function run($group, array $assets = array(), $remove = array(), $prefix = null )
     {
+        $html = '';
+
+        if (isset($remove[$group]) && is_array($remove) && count($remove[$group]) > 0) {
+            foreach($remove[$group] as $rem){
+                unset($assets[$rem['type']][$rem['name']]);
+            }
+        }
+
         $html = '';
 
         if (! isset($assets[$group]) || count($assets[$group]) == 0) {
