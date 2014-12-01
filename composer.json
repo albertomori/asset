@@ -18,7 +18,7 @@
 	},
 	"require": {
 		"php": ">=5.4.0",
-		"orchestra/html": "3.0.*"
+		"orchestra/html": "2.1.*"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.9.*",
