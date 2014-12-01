@@ -246,6 +246,6 @@ class Container
      */
     protected function group($group)
     {
-        return $this->dispatcher->run($group, $this->assets, $this->path);
+        return $this->dispatcher->run($group, $this->assets, $this->removable, $this->path);
     }
 }
