@@ -31,6 +31,13 @@ class Container
     protected $assets = array();
 
     /**
+     * All of the registered assets.
+     *
+     * @var array
+     */
+    protected $override = array();
+
+    /**
      * All of the removed assets.
      *
      * @var array
@@ -182,6 +189,15 @@ class Container
         $dependencies = (array) $dependencies;
         $attributes   = (array) $attributes;
 
+        if(starts_with($name, '!')){
+            $name = substr($name, 1, strlen($name) -1 );
+            $this->override[$type][$name] = array(
+                'source'       => $source,
+                'dependencies' => $dependencies,
+                'attributes'   => $attributes,
+            );
+        }
+
         $this->assets[$type][$name] = array(
             'source'       => $source,
             'dependencies' => $dependencies,
@@ -246,6 +262,13 @@ class Container
      */
     protected function group($group)
     {
+        if(isset($this->override[$group])){
+            foreach($this->override[$group] as $name => $over){
+                $this->assets[$group][$name] = $over;
+            }
+            unset($this->override[$group]);
+        }
+        
         return $this->dispatcher->run($group, $this->assets, $this->removable, $this->path);
     }
 }
